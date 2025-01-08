@@ -1,0 +1,278 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #5b69e1;
+            color: #EAEAEA;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .password-generator {
+            background-color: #080e2f;
+            padding: min(1.5rem, 5em);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 22rem;
+            text-align: center;
+        }
+
+        h4 {
+            margin-bottom: 20px;
+            color: #EAEAEA;
+        }
+
+        textarea {
+            width: 100%;
+            height: 60px;
+            margin-bottom: 15px;
+            resize: none;
+            border: 2px solid #3A3B5A;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #1c2241;
+            color: #EAEAEA;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            border-color: #76A6EF;
+        }
+
+        .options-group {
+            background-color: #1c2241;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            color: #EAEAEA;
+            text-align: left;
+        }
+
+        .length-group {
+            background-color: #1c2241;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        label {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: #EAEAEA;
+            width: 100%;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .range-container {
+            position: relative;
+            width: 100%;
+            border-radius: 5px;
+            overflow: hidden;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .range-output {
+            position: absolute;
+            bottom: 3px;
+            right: 0;
+            background-color: #1c2241;
+            color: #EAEAEA;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 3px;
+            display: inline-block;
+            text-align: center;
+        }
+
+        input[type=checkbox] {
+            display: none;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: calc(100% - 50px);
+            height: 16px;
+            background: linear-gradient(to right, #5b69e1 0%, #5b69e1 50%, #3A3B5A 50%, #3A3B5A 100%);
+            outline: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background-color: #5b69e1;
+            border: 2px solid #EAEAEA;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background-color: #5b69e1;
+            border: 2px solid #EAEAEA;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="range"]:focus {
+            outline: none;
+        }
+
+        .switch {
+            position: relative;
+            width: 34px;
+            height: 18px;
+            background-color: #ccc;
+            border-radius: 18px;
+            transition: 0.4s;
+            margin-left: 10px;
+        }
+
+        .switch::before {
+            content: "";
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.4s;
+        }
+
+        input:checked + .switch {
+            background-color: #5b69e1;
+        }
+
+        input:checked + .switch::before {
+            transform: translateX(16px);
+        }
+
+        button {
+            background-color: #5b69e1;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 15px 30px;
+            font-size: 16px;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #558AD1;
+        }
+    </style>
+</head>
+<body>
+    <div class="password-generator">
+        <h4>Generate a Secure Password</h4>
+        <textarea id="textareaContent" readonly></textarea>
+        
+        <div class="length-group">
+            <div class="range-container">
+                <label for="length">Password Length:</label>
+                <input type="range" id="length" min="6" max="32" value="19" oninput="updateRangeValue(this)">
+                <div class="range-output">
+                    <span id="range-value">19</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="options-group">
+            <label for="uppercase">
+                Include Uppercase Letters
+                <input type="checkbox" id="uppercase">
+                <span class="switch"></span>
+            </label>
+            <label for="lowercase">
+                Include Lowercase Letters
+                <input type="checkbox" id="lowercase">
+                <span class="switch"></span>
+            </label>
+            <label for="numbers">
+                Include Numbers
+                <input type="checkbox" id="numbers">
+                <span class="switch"></span>
+            </label>
+            <label for="symbols">
+                Include Symbols
+                <input type="checkbox" id="symbols">
+                <span class="switch"></span>
+            </label>
+        </div>
+
+        <button onclick="generatePassword()">Generate Password</button>
+    </div>
+
+    <script>
+        function generatePassword() {
+            const length = document.getElementById('length').value;
+            const includeUppercase = document.getElementById('uppercase').checked;
+            const includeLowercase = document.getElementById('lowercase').checked;
+            const includeNumbers = document.getElementById('numbers').checked;
+            const includeSymbols = document.getElementById('symbols').checked;
+
+            const uppercaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const lowercaseLetters = 'abcdefghijklmnopqrstuvwxyz';
+            const numbers = '0123456789';
+            const symbols = '!@#$%^&*()_+~`|}{[]\\:;?><,./-=';
+
+            let characters = '';
+            if (includeUppercase) characters += uppercaseLetters;
+            if (includeLowercase) characters += lowercaseLetters;
+            if (includeNumbers) characters += numbers;
+            if (includeSymbols) characters += symbols;
+
+            if (characters === '') {
+                alert('Please select at least one character type!');
+                return;
+            }
+
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                password += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+
+            document.getElementById('textareaContent').value = password;
+        }
+
+        function updateRangeValue(range) {
+            const slider = document.getElementById('range-value');
+            const percentage = ((range.value - range.min) / (range.max - range.min)) * 100;
+            slider.textContent = range.value;
+
+            // Update the background to reflect the range's value
+            range.style.background = `linear-gradient(to right, #5b69e1 0%, #5b69e1 ${percentage}%, #3A3B5A ${percentage}%, #3A3B5A 100%)`;
+        }
+
+    </script>
+</body>
+</html>
